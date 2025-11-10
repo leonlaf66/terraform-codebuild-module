@@ -8,11 +8,6 @@ variable "aws_region" {
   type        = string
 }
 
-variable "aws_account_id" {
-  description = "The AWS account ID."
-  type        = string
-}
-
 variable "service_role_arn" {
   description = "The ARN of the shared IAM role (from the platform-infra project) to assign to this project."
   type        = string
