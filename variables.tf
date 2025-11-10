@@ -3,11 +3,6 @@ variable "app_name" {
   type        = string
 }
 
-variable "aws_region" {
-  description = "The AWS region."
-  type        = string
-}
-
 variable "service_role_arn" {
   description = "The ARN of the shared IAM role (from the platform-infra project) to assign to this project."
   type        = string

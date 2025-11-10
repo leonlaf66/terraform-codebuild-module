@@ -2,7 +2,7 @@ locals {
   log_group_name = "/aws/codebuild/${var.app_name}"
 }
 
-resource "aws_logs_group" "project_logs" {
+resource "aws_cloudwatch_log_group" "project_logs" {
   name              = local.log_group_name
   retention_in_days = var.log_retention_days
   tags              = var.common_tags
@@ -54,13 +54,13 @@ resource "aws_codebuild_project" "project" {
 
   logs_config {
     cloudwatch_logs {
-      group_name  = aws_logs_group.project_logs.name
+      group_name  = aws_cloudwatch_log_group.project_logs.name
       stream_name = "build"
     }
   }
 
   depends_on = [
-    aws_logs_group.project_logs
+    aws_cloudwatch_log_group.project_logs
   ]
 }
 
