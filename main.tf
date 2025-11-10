@@ -23,10 +23,7 @@ resource "aws_codebuild_project" "project" {
     git_clone_depth     = 1
     buildspec           = var.buildspec
     report_build_status = var.trigger_on_pr
-    auth {
-      type     = "OAUTH"
-      resource = "arn:aws:secretsmanager:us-east-1:286005841113:secret:nodejs-demo-github-token-dRHXbL"
-    }
+
     git_submodules_config {
       fetch_submodules = true
     }
