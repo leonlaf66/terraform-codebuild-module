@@ -10,6 +10,6 @@ output "project_name" {
 
 output "project_log_group_name" {
   description = "The name of the CloudWatch Log Group for this project."
-  value       = aws_logs_group.project_logs.name
+  value       = aws_cloudwatch_log_group.project_logs.name
 }
 
