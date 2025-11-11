@@ -1,5 +1,13 @@
 locals {
   log_group_name = "/aws/codebuild/${var.app_name}"
+  all_environment_variables = concat(
+    var.environment_variables,
+    var.ssm_latest_tag_parameter_name != "" ? [{
+      name  = "SSM_PARAMETER_NAME"
+      value = var.ssm_latest_tag_parameter_name
+      type  = "PLAINTEXT"
+    }] : []
+  )
 }
 
 resource "aws_cloudwatch_log_group" "project_logs" {
@@ -23,9 +31,9 @@ resource "aws_codebuild_project" "project" {
     git_clone_depth     = 1
     buildspec           = var.buildspec
     report_build_status = var.trigger_on_pr
-    auth {
-      type     = "OAUTH"
-      resource = "arn:aws:secretsmanager:us-east-1:286005841113:secret:nodejs-demo-github-token-dRHXbL"
+
+    git_submodules_config {
+      fetch_submodules = true
     }
   }
 
@@ -41,19 +49,13 @@ resource "aws_codebuild_project" "project" {
     image_pull_credentials_type = "CODEBUILD"
 
     dynamic "environment_variable" {
-      for_each = var.environment_variables
+      for_each = local.all_environment_variables
       content {
         name  = environment_variable.value.name
         value = environment_variable.value.value
         type  = environment_variable.value.type
       }
     }
-  }
-
-  vpc_config {
-    vpc_id             = data.aws_vpc.selected.id
-    subnets            = data.aws_subnets.default.ids
-    security_group_ids = [aws_security_group.codebuild_sg.id]
   }
 
   logs_config {
@@ -93,4 +95,20 @@ resource "aws_codebuild_webhook" "webhook" {
     }
   }
 
+}
+
+###ssm
+resource "aws_ssm_parameter" "latest_tag" {
+  count = var.ssm_latest_tag_parameter_name != "" ? 1 : 0
+  
+  name  = var.ssm_latest_tag_parameter_name
+  type  = "String"
+  value = "no-build-has-run-yet"
+  tags  = var.common_tags
+
+  lifecycle {
+    ignore_changes = [
+      value,
+    ]
+  }
 }

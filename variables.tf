@@ -72,3 +72,10 @@ variable "environment_variables" {
     type  = optional(string, "PLAINTEXT")
   }))
 }
+
+# --- SSM ---
+variable "ssm_latest_tag_parameter_name" {
+  description = "If set (e.g., '/app/latest_tag'), creates an SSM Parameter to store the latest image tag. This value will also be injected into the build as the SSM_PARAMETER_NAME environment variable."
+  type        = string
+  default     = ""
+}
