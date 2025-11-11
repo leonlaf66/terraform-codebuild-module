@@ -50,12 +50,6 @@ resource "aws_codebuild_project" "project" {
     }
   }
 
-  vpc_config {
-    vpc_id             = data.aws_vpc.selected.id
-    subnets            = data.aws_subnets.default.ids
-    security_group_ids = [aws_security_group.codebuild_sg.id]
-  }
-
   logs_config {
     cloudwatch_logs {
       group_name  = aws_cloudwatch_log_group.project_logs.name
