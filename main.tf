@@ -88,3 +88,19 @@ resource "aws_codebuild_webhook" "webhook" {
   }
 
 }
+
+###ssm
+resource "aws_ssm_parameter" "latest_tag" {
+  count = var.ssm_latest_tag_parameter_name != "" ? 1 : 0
+  
+  name  = var.ssm_latest_tag_parameter_name
+  type  = "String"
+  value = "no-build-has-run-yet"
+  tags  = var.common_tags
+
+  lifecycle {
+    ignore_changes = [
+      value,
+    ]
+  }
+}
