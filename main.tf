@@ -1,5 +1,13 @@
 locals {
   log_group_name = "/aws/codebuild/${var.app_name}"
+  all_environment_variables = concat(
+    var.environment_variables,
+    var.ssm_latest_tag_parameter_name != "" ? [{
+      name  = "SSM_PARAMETER_NAME"
+      value = var.ssm_latest_tag_parameter_name
+      type  = "PLAINTEXT"
+    }] : []
+  )
 }
 
 resource "aws_cloudwatch_log_group" "project_logs" {
@@ -41,7 +49,7 @@ resource "aws_codebuild_project" "project" {
     image_pull_credentials_type = "CODEBUILD"
 
     dynamic "environment_variable" {
-      for_each = var.environment_variables
+      for_each = local.all_environment_variables
       content {
         name  = environment_variable.value.name
         value = environment_variable.value.value
