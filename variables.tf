@@ -79,3 +79,16 @@ variable "ssm_latest_tag_parameter_name" {
   type        = string
   default     = ""
 }
+
+###spacelift
+variable "spacelift_api_secret_arn" {
+  description = "The ARN of the Spacelift API key (stored in Secrets Manager) to inject into the build."
+  type        = string
+  default     = ""
+}
+
+variable "spacelift_ecs_stack_id" {
+  description = "The Spacelift ID of the ECS deployment stack that CodeBuild should trigger after a successful build."
+  type        = string
+  default     = ""
+}
