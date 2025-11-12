@@ -6,6 +6,18 @@ locals {
       name  = "SSM_PARAMETER_NAME"
       value = var.ssm_latest_tag_parameter_name
       type  = "PLAINTEXT"
+    }] : [],
+
+    var.spacelift_api_secret_arn != "" ? [{
+      name  = "SPACELIFT_API_SECRET_ARN"
+      value = var.spacelift_api_secret_arn
+      type  = "PLAINTEXT"
+    }] : [],
+
+    var.spacelift_ecs_stack_id != "" ? [{
+      name  = "SPACELIFT_ECS_STACK_ID"
+      value = var.spacelift_ecs_stack_id
+      type  = "PLAINTEXT"
     }] : []
   )
 }
