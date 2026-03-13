@@ -61,7 +61,7 @@ variable "privileged_mode" {
 variable "trigger_on_pr" {
   description = "If true, triggers a build on PR creation or on push to a branch with an open PR."
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "environment_variables" {
